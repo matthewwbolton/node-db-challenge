@@ -8,6 +8,8 @@ module.exports = {
   findProjectById,
   addProject,
   findProjectsAndTasks,
+  updateProject,
+  deleteProject,
 };
 
 function findProjects() {
@@ -46,4 +48,17 @@ function findProjectsAndTasks(project_id) {
     .from("tasks as t")
     .join("projects as p", "p.id", "t.project_id")
     .where("t.project_id", project_id);
+}
+
+function updateProject(changes, project_id) {
+  return db("projects")
+    .update(changes)
+    .where("projects.id", project_id)
+    .then(() => {
+      return findProjectById(project_id);
+    });
+}
+
+function deleteProject(project_id) {
+  return db("projects as p").where("p.id", project_id).del();
 }

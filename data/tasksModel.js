@@ -7,6 +7,8 @@ module.exports = {
   findTasks,
   findTaskById,
   addTask,
+  updateTask,
+  deleteTask,
 };
 
 function findTasks() {
@@ -23,4 +25,17 @@ function addTask(newTask) {
     .then(([id]) => {
       return findTaskById(id);
     });
+}
+
+function updateTask(changes, task_id) {
+  return db("tasks")
+    .updateTask(changes)
+    .where("tasks.id", task_id)
+    .then(() => {
+      return findTaskById(task_id);
+    });
+}
+
+function deleteTask(task_id) {
+  return db("tasks").where("tasks.id", task_id).del();
 }
