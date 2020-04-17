@@ -71,11 +71,20 @@ router.delete("/:id", (req, res) => {
   const { id } = req.params;
   Projects.deleteProject(id)
     .then((project) => {
-      res
-        .status(200)
-        .json({
-          message: `The project with ID ${id} has been successfully deleted from the database.`,
-        });
+      res.status(200).json({
+        message: `The project with ID ${id} has been successfully deleted from the database.`,
+      });
+    })
+    .catch((error) => {
+      res.status(500).json({ error: `Internal Server Error` });
+    });
+});
+
+router.get("/:id/wholeproject", (req, res) => {
+  const { id } = req.params;
+  Projects.getEverythingFromProjects(id)
+    .then((wholeProject) => {
+      res.status(200).json(wholeProject);
     })
     .catch((error) => {
       res.status(500).json({ error: `Internal Server Error` });

@@ -66,7 +66,7 @@ function deleteProject(project_id) {
 
 function getEverythingFromProjects(project_id) {
   return db
-    .select("*", "count(*)")
+    .select("*")
     .from("project_resources as pr")
     .innerJoin("projects as p", "pr.project_id", "p.id")
     .innerJoin("tasks as t", "t.project_id", "pr.project_id")
