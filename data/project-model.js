@@ -10,6 +10,7 @@ module.exports = {
   findProjectsAndTasks,
   updateProject,
   deleteProject,
+  getEverythingFromProjects,
 };
 
 function findProjects() {
@@ -61,4 +62,16 @@ function updateProject(changes, project_id) {
 
 function deleteProject(project_id) {
   return db("projects as p").where("p.id", project_id).del();
+}
+
+function getEverythingFromProjects(project_id) {
+  return db
+    .select("*", "count(*)")
+    .from("project_resources as pr")
+    .innerJoin("projects as p", "pr.project_id", "p.id")
+    .innerJoin("tasks as t", "t.project_id", "pr.project_id")
+    .innerJoin("resources as r", "pr.resource_id", "r.id")
+    .where("p.id", project_id)
+    .groupBy("t.id")
+    .groupBy("r.id");
 }
