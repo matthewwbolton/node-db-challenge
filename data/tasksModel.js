@@ -29,7 +29,7 @@ function addTask(newTask) {
 
 function updateTask(changes, task_id) {
   return db("tasks")
-    .updateTask(changes)
+    .update(changes)
     .where("tasks.id", task_id)
     .then(() => {
       return findTaskById(task_id);
