@@ -11,6 +11,7 @@ module.exports = {
   updateProject,
   deleteProject,
   getEverythingFromProjects,
+  getAllProject,
 };
 
 function findProjects() {
@@ -74,4 +75,30 @@ function getEverythingFromProjects(project_id) {
     .where("p.id", project_id)
     .groupBy("t.id")
     .groupBy("r.id");
+}
+
+function getAllProject(project_id) {
+  const project = db("projects")
+    .where("id", project_id)
+    .then((project) => project);
+
+  const tasks = db("tasks")
+    .where("project_id", project_id)
+    .then((task) => task);
+
+  const resources = db
+    .select("*")
+    .from("resources as r")
+    .join("project_resources as pr", "pr.resource_id", "r.id")
+    .where("resource_id", project_id)
+    .then((resources) => resources);
+
+  return Promise.all([project, tasks, resources]).then(([pV, tV, rV]) => {
+    const object = {
+      project: pV,
+      tasks: tV.map((elem) => elem),
+      resources: rV.map((elem) => elem),
+    };
+    return object;
+  });
 }

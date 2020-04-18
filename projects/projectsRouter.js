@@ -91,4 +91,15 @@ router.get("/:id/wholeproject", (req, res) => {
     });
 });
 
+router.get("/:id/getAllProject", (req, res) => {
+  const { id } = req.params;
+  Projects.getAllProject(id)
+    .then((allProject) => {
+      res.status(200).json(allProject);
+    })
+    .catch((error) => {
+      res.status(500).json({ error: `Internal Server Error` });
+    });
+});
+
 module.exports = router;
